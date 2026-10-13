@@ -30,6 +30,23 @@ export interface LedgerData {
   outgoing: OutgoingGift[]
 }
 
+export interface PersonTransaction {
+  id: string
+  type: 'income' | 'expense'
+  amount: number
+  date: string
+  address: string
+  banquetId: string
+  banquetName: string
+}
+
+export interface PersonSummary {
+  name: string
+  income: number
+  expense: number
+  balance: number
+}
+
 const STORAGE_KEY = 'gift-ledger-v1'
 
 export function ensureStore(): LedgerData {
@@ -82,6 +99,55 @@ export function totals(data: LedgerData): { received: number; sent: number; bala
   const received = data.banquets.reduce((sum, banquet) => sum + banquetTotal(banquet), 0)
   const sent = data.outgoing.reduce((sum, gift) => sum + gift.amount, 0)
   return { received, sent, balance: received - sent }
+}
+
+function personKey(name: string): string {
+  return name.trim().toLocaleLowerCase()
+}
+
+export function getPersonTransactions(name: string): PersonTransaction[] {
+  const key = personKey(name)
+  if (!key) return []
+  const ledger = getLedger()
+  const transactions: PersonTransaction[] = []
+  for (const banquet of ledger.banquets) {
+    for (const guest of banquet.guests) {
+      if (personKey(guest.name) !== key) continue
+      transactions.push({ id: guest.id, type: 'income', amount: guest.amount, date: guest.date || banquet.date, address: guest.address, banquetId: banquet.id, banquetName: banquet.name })
+    }
+  }
+  for (const gift of ledger.outgoing) {
+    if (personKey(gift.name) !== key) continue
+    transactions.push({ id: gift.id, type: 'expense', amount: gift.amount, date: gift.date, address: gift.address, banquetId: '', banquetName: '' })
+  }
+  return transactions.sort((a, b) => b.date.localeCompare(a.date))
+}
+
+export function getPeopleSummary(): PersonSummary[] {
+  const ledger = getLedger()
+  const people = new Map<string, PersonSummary>()
+  const getPerson = (name: string): PersonSummary | undefined => {
+    const displayName = name.trim()
+    if (!displayName) return undefined
+    const key = personKey(displayName)
+    let person = people.get(key)
+    if (!person) {
+      person = { name: displayName, income: 0, expense: 0, balance: 0 }
+      people.set(key, person)
+    }
+    return person
+  }
+  for (const banquet of ledger.banquets) {
+    for (const guest of banquet.guests) {
+      const person = getPerson(guest.name)
+      if (person) person.income += guest.amount
+    }
+  }
+  for (const gift of ledger.outgoing) {
+    const person = getPerson(gift.name)
+    if (person) person.expense += gift.amount
+  }
+  return Array.from(people.values()).map((person) => ({ ...person, balance: person.income - person.expense }))
 }
 
 export function formatDate(date: string): string {

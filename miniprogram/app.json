@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/summary/summary",
+    "pages/person-detail/person-detail",
     "pages/banquet-list/banquet-list",
     "pages/banquet-detail/banquet-detail",
     "pages/banquet-form/banquet-form",

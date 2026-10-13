@@ -7,8 +7,8 @@ function emptyGuestRow(): GuestRow {
 }
 
 Page({
-  data: { id: '', name: '', date: '', location: '', total: '0.00', count: 0, keyword: '', guests: [] as GuestRow[] },
-  onLoad(query: Record<string, string | undefined>) { this.setData({ id: query.id || '' }) },
+  data: { id: '', sourceGuestId: '', name: '', date: '', location: '', total: '0.00', count: 0, keyword: '', guests: [] as GuestRow[] },
+  onLoad(query: Record<string, string | undefined>) { this.setData({ id: query.id || '', sourceGuestId: query.guestId || '' }) },
   onShow() { this.refresh() },
   refresh() {
     const banquet = getLedger().banquets.find((item) => item.id === this.data.id)
@@ -25,6 +25,8 @@ Page({
       total: money(banquetTotal(banquet)),
       count: banquet.guests.length,
       guests: [...savedRows, ...partialRows, emptyGuestRow()],
+    }, () => {
+      if (this.data.sourceGuestId) wx.pageScrollTo({ selector: `#guest-${this.data.sourceGuestId}`, duration: 300 })
     })
   },
   search(e: WechatMiniprogram.Input) { this.setData({ keyword: e.detail.value }, () => this.refresh()) },
