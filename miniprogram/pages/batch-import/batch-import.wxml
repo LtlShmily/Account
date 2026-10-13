@@ -1,14 +1,15 @@
 <view class="page batch-import-page">
-  <view class="batch-import-heading"><text class="batch-import-title">批量导入</text><text class="batch-import-subtitle">{{banquetName}} · 每行一条记录</text></view>
+  <view class="batch-import-heading"><text class="batch-import-title">{{pageTitle}}</text><text class="batch-import-subtitle">{{banquetName}} · 每行一条记录</text></view>
   <view class="form-card batch-import-card">
     <text class="batch-label">请输入或粘贴以下格式的内容</text>
-    <textarea class="batch-textarea" value="{{content}}" bindinput="onTextInput" placeholder="姓名  金额  备注  礼品&#10;周子其  200  雷打坡  酒&#10;黄朋  100  翁刚  衣服" maxlength="12000" auto-height="false" cursor-spacing="24" />
+    <textarea class="batch-textarea" value="{{content}}" bindinput="onTextInput" placeholder="{{exampleText}}" maxlength="12000" auto-height="false" cursor-spacing="24" />
     <text class="batch-count">{{lineCount}} 条</text>
     <view class="batch-format-note">
       <text class="batch-format-title">格式说明</text>
-      <text class="batch-format-line">• 每行一条，按“名字、金额、备注、礼品”排列。</text>
+      <text wx:if="{{importType === 'income'}}" class="batch-format-line">• 每行一条，按“名字、金额、备注、礼品”排列。</text>
+      <text wx:else class="batch-format-line">• 每行一条，按“收礼对象、金额、地址、礼品”排列。</text>
       <text class="batch-format-line">• 列之间用制表符或两个及以上空格分隔；也可直接粘贴表格单元格。</text>
-      <text class="batch-format-line">• 名字和金额必填；备注、礼品可留空。金额单位为元，例如 200。</text>
+      <text class="batch-format-line">• {{fieldName}}和金额必填；{{fieldThird}}、礼品可留空。金额单位为元，例如 200。</text>
       <text class="batch-format-line">• 任一行缺少姓名或金额、金额无效或列数超出 4 列，整批导入都会失败。</text>
       <text class="batch-format-line">• 礼品仅作记录，不计入金额。</text>
     </view>

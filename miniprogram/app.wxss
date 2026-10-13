@@ -105,5 +105,22 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .transaction-gift { overflow:hidden; color:#98734e; font-size:20rpx; white-space:nowrap; text-overflow:ellipsis; }
 .gift-cell { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .table-scroll { width:100%; white-space:nowrap; }
-.banquet-guest-table { width:1080rpx; }
-.outgoing-gift-table { width:900rpx; }
+.banquet-guest-table,.outgoing-gift-table { width:100%; }
+.banquet-guest-table .cell,.outgoing-gift-table .cell { padding-left:3rpx; padding-right:3rpx; font-size:19rpx; white-space:nowrap; }
+.banquet-guest-table .cell-name { flex:1.05; min-width:0; }
+.banquet-guest-table .cell:nth-child(2) { flex:.72; }
+.banquet-guest-table .cell:nth-child(3) { flex:1.1; }
+.banquet-guest-table .cell:nth-child(4) { flex:.9; }
+.banquet-guest-table .cell-action { width:58rpx; }
+.banquet-guest-table .cell-input { padding:0 1rpx; font-size:19rpx; }
+.banquet-guest-table .cell-input-amount { font-size:19rpx; }
+.compact-delete { display:inline-flex; align-items:center; justify-content:center; width:42rpx; height:44rpx; border-radius:9rpx; color:#a62620; background:#fff0ed; font-size:20rpx; }
+.outgoing-gift-table .cell-name { flex:1.1; min-width:0; }
+.outgoing-gift-table .table-row > .cell:nth-child(2) { flex:.65; }
+.outgoing-gift-table .table-row > .cell:nth-child(3) { flex:.95; }
+.outgoing-gift-table .table-row > .cell:nth-child(4) { flex:.8; }
+.outgoing-gift-table .table-head > .cell:nth-child(2) { flex:.65; }
+.outgoing-gift-table .table-head > .cell:nth-child(3) { flex:.95; }
+.outgoing-gift-table .table-head > .cell:nth-child(4) { flex:.8; }
+.outgoing-gift-table .table-action-head,.outgoing-gift-table .row-actions { flex:none; width:70rpx; padding:0 3rpx; justify-content:space-around; gap:0; }
+.outgoing-import-action { margin:-12rpx 0 20rpx; padding:12rpx 0; border:1rpx solid #d7e5e2; border-radius:14rpx; text-align:center; background:#f7fbfa; }

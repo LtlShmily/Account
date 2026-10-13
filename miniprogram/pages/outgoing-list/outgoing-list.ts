@@ -15,6 +15,7 @@ Page({
   chooseMonth(e: WechatMiniprogram.PickerChange) { this.setData({ monthIndex: Number(e.detail.value) }, () => this.refresh()) },
   search(e: WechatMiniprogram.Input) { this.setData({ keyword: e.detail.value }, () => this.refresh()) },
   createGift() { wx.navigateTo({ url: '/pages/outgoing-form/outgoing-form' }) },
+  importGifts() { wx.navigateTo({ url: '/pages/batch-import/batch-import?type=outgoing' }) },
   editGift(e: WechatMiniprogram.TouchEvent) { wx.navigateTo({ url: `/pages/outgoing-form/outgoing-form?id=${e.currentTarget.dataset.id}` }) },
   deleteGift(e: WechatMiniprogram.TouchEvent) {
     const id = String(e.currentTarget.dataset.id)
