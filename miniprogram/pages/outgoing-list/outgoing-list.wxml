@@ -4,9 +4,13 @@
   <view class="primary-button teal-button" bindtap="createGift">＋　新增送礼记录</view>
   <view class="secondary-action outgoing-import-action" bindtap="importGifts">批量导入</view>
   <view class="toolbar"><view class="search-box">⌕　<input placeholder="搜索姓名或备注" value="{{keyword}}" bindinput="search" /></view><view class="month-box"><picker mode="selector" range="{{months}}" value="{{monthIndex}}" bindchange="chooseMonth">{{months[monthIndex]}}　⌄</picker></view></view>
+  <view class="batch-toolbar">
+    <text class="batch-mode-toggle" bindtap="toggleBatchMode">{{batchMode ? '完成' : '批量操作'}}</text>
+    <view wx:if="{{batchMode}}" class="batch-toolbar-actions"><text bindtap="selectAllVisible">全选当前</text><text>已选 {{selectedIds.length}} 条</text><text bindtap="exportSelected">复制导出</text><text class="batch-delete-action" bindtap="deleteSelected">删除</text></view>
+  </view>
   <view wx:if="{{items.length}}" class="table outgoing-record-table">
-    <view class="table-head teal-head"><text class="cell cell-name">收礼对象</text><text class="cell">金额</text><text class="cell">备注</text><text class="cell table-action-head">操作</text></view>
-    <view wx:for="{{items}}" wx:key="id" class="table-row"><view class="cell cell-name"><text>{{item.name}}</text><text class="cell-sub">{{item.date}}</text></view><text class="cell cell-amount">{{item.amount}}</text><text class="cell outgoing-note-cell">{{item.note}}</text><view class="row-actions" style="color:#286a6e"><text data-id="{{item.id}}" bindtap="editGift">改</text><text data-id="{{item.id}}" bindtap="deleteGift">删</text></view></view>
+    <view class="table-head teal-head"><text class="cell cell-name">收礼对象</text><text class="cell">金额</text><text class="cell">备注</text><text class="cell table-action-head">{{batchMode ? '选' : '操作'}}</text></view>
+    <view wx:for="{{items}}" wx:key="id" class="table-row"><view class="cell cell-name"><text>{{item.name}}</text><text class="cell-sub">{{item.date}}</text></view><text class="cell cell-amount">{{item.amount}}</text><text class="cell outgoing-note-cell">{{item.note}}</text><view class="row-actions" style="color:#286a6e"><text wx:if="{{batchMode}}" class="row-select-mark" data-id="{{item.id}}" catchtap="toggleSelected">{{item.selected ? '☑' : '□'}}</text><block wx:else><text data-id="{{item.id}}" bindtap="editGift">改</text><text data-id="{{item.id}}" bindtap="deleteGift">删</text></block></view></view>
   </view>
   <view wx:else class="empty-card"><text class="empty-mark" style="color:#3b7777">✦</text><text>没有符合条件的送礼记录</text><text class="empty-hint">可调整月份或添加一笔新记录</text></view>
 </view>

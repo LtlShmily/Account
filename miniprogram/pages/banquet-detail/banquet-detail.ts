@@ -1,13 +1,14 @@
 import { banquetTotal, formatDate, getLedger, GuestGift, makeId, money, parseAmount, saveLedger } from '../../services/ledger'
+import { formatBatchImportText } from '../../services/batch-export'
 
-interface GuestRow { id: string; recordId: string; name: string; amount: string; address: string; date: string; isDraft: boolean }
+interface GuestRow { id: string; recordId: string; name: string; amount: string; address: string; date: string; isDraft: boolean; selected: boolean }
 
 function emptyGuestRow(): GuestRow {
-  return { id: `draft-${makeId()}`, recordId: '', name: '', amount: '', address: '', date: '', isDraft: true }
+  return { id: `draft-${makeId()}`, recordId: '', name: '', amount: '', address: '', date: '', isDraft: true, selected: false }
 }
 
 Page({
-  data: { id: '', sourceGuestId: '', name: '', date: '', location: '', total: '0.00', count: 0, keyword: '', guests: [] as GuestRow[] },
+  data: { id: '', sourceGuestId: '', name: '', date: '', location: '', total: '0.00', count: 0, keyword: '', batchMode: false, selectedIds: [] as string[], guests: [] as GuestRow[] },
   onLoad(query: Record<string, string | undefined>) { this.setData({ id: query.id || '', sourceGuestId: query.guestId || '' }) },
   onShow() { this.refresh() },
   refresh() {
@@ -15,7 +16,7 @@ Page({
     if (!banquet) { wx.showToast({ title: '宴席不存在', icon: 'none' }); setTimeout(() => wx.navigateBack(), 500); return }
     const keyword = this.data.keyword.trim().toLocaleLowerCase()
     const savedRows: GuestRow[] = banquet.guests
-      .map((guest) => ({ id: guest.id, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, date: guest.date, isDraft: false }))
+      .map((guest) => ({ id: guest.id, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, date: guest.date, isDraft: false, selected: this.data.selectedIds.includes(guest.id) }))
       .filter((guest) => !keyword || guest.name.toLocaleLowerCase().includes(keyword))
     const partialRows = this.data.guests.filter((guest) => guest.isDraft && (guest.name.trim() || guest.amount.trim() || guest.address.trim()))
     this.setData({
@@ -29,7 +30,41 @@ Page({
       if (this.data.sourceGuestId) wx.pageScrollTo({ selector: `#guest-${this.data.sourceGuestId}`, duration: 300 })
     })
   },
-  search(e: WechatMiniprogram.Input) { this.setData({ keyword: e.detail.value }, () => this.refresh()) },
+  search(e: WechatMiniprogram.Input) { this.setData({ keyword: e.detail.value, selectedIds: [] }, () => this.refresh()) },
+  toggleBatchMode() { this.setData({ batchMode: !this.data.batchMode, selectedIds: [] }, () => this.refresh()) },
+  toggleSelected(e: WechatMiniprogram.TouchEvent) {
+    const id = String(e.currentTarget.dataset.id || '')
+    if (!id) return
+    const selectedIds = this.data.selectedIds.includes(id) ? this.data.selectedIds.filter((item) => item !== id) : [...this.data.selectedIds, id]
+    this.setData({ selectedIds }, () => this.refresh())
+  },
+  selectAllVisible() {
+    const selectedIds = this.data.guests.filter((row) => !row.isDraft).map((row) => row.recordId)
+    this.setData({ selectedIds }, () => this.refresh())
+  },
+  exportSelected() {
+    if (!this.data.selectedIds.length) { wx.showToast({ title: '请先选择要导出的记录', icon: 'none' }); return }
+    const banquet = getLedger().banquets.find((item) => item.id === this.data.id)
+    if (!banquet) return
+    const selected = new Set(this.data.selectedIds)
+    const text = formatBatchImportText(banquet.guests.filter((guest) => selected.has(guest.id)).map((guest) => ({ name: guest.name, amount: guest.amount, remark: guest.address })))
+    wx.setClipboardData({ data: text, success: () => wx.showToast({ title: `已复制 ${this.data.selectedIds.length} 条`, icon: 'success' }) })
+  },
+  deleteSelected() {
+    const count = this.data.selectedIds.length
+    if (!count) { wx.showToast({ title: '请先选择要删除的记录', icon: 'none' }); return }
+    wx.showModal({ title: `删除选中的 ${count} 条记录？`, content: '删除后无法恢复。', confirmColor: '#b91f1b', success: (result) => {
+      if (!result.confirm) return
+      const ledger = getLedger()
+      const banquet = ledger.banquets.find((item) => item.id === this.data.id)
+      if (!banquet) return
+      const selected = new Set(this.data.selectedIds)
+      banquet.guests = banquet.guests.filter((guest) => !selected.has(guest.id))
+      saveLedger(ledger)
+      this.setData({ selectedIds: [] }, () => this.refresh())
+      wx.showToast({ title: `已删除 ${count} 条`, icon: 'success' })
+    } })
+  },
   onCellInput(e: WechatMiniprogram.Input) {
     const id = String(e.currentTarget.dataset.id)
     const field = String(e.currentTarget.dataset.field)

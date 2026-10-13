@@ -2,11 +2,11 @@ import { getLedger, makeId, saveLedger, today } from '../../services/ledger'
 import { parseBatchRecordText } from '../../services/batch-import'
 
 Page({
-  data: { importType: 'income', banquetId: '', banquetName: '', pageTitle: '批量导入收礼记录', fieldName: '名字', fieldThird: '备注', exampleText: '姓名  金额  备注\n周子其  200  雷打坡\n黄朋  100  翁刚', content: '', lineCount: 0 },
+  data: { importType: 'income', banquetId: '', banquetName: '', pageTitle: '批量导入收礼记录', fieldName: '名字', fieldThird: '备注', exampleText: '姓名  金额  备注（每行一条，如：张三  200  XX小区）', content: '', lineCount: 0 },
   onReady() { wx.setNavigationBarTitle({ title: this.data.pageTitle }) },
   onLoad(query: Record<string, string | undefined>) {
     if (query.type === 'outgoing') {
-      this.setData({ importType: 'outgoing', banquetName: '送出礼金', pageTitle: '批量导入送礼记录', fieldName: '收礼对象', fieldThird: '备注', exampleText: '收礼对象  金额  备注\n张三  200  XX小区\n李四  100  其他说明' })
+      this.setData({ importType: 'outgoing', banquetName: '送出礼金', pageTitle: '批量导入送礼记录', fieldName: '收礼对象', fieldThird: '备注', exampleText: '姓名  金额  备注（每行一条，如：张三  200  XX小区）' })
       return
     }
     const banquetId = query.banquetId || ''

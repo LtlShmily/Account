@@ -119,3 +119,9 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .outgoing-record-table .table-head > .cell:nth-child(3) { flex:1.25; }
 .outgoing-record-table .table-action-head,.outgoing-record-table .row-actions { flex:none; width:70rpx; padding:0 3rpx; justify-content:space-around; gap:0; }
 .outgoing-import-action { margin:-12rpx 0 20rpx; padding:12rpx 0; border:1rpx solid #d7e5e2; border-radius:14rpx; text-align:center; background:#f7fbfa; }
+.batch-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12rpx; margin:10rpx 0 12rpx; padding:12rpx 14rpx; border:1rpx solid #eadfd3; border-radius:12rpx; background:#fffdf9; }
+.batch-mode-toggle { flex:none; color:#a82922; font-size:21rpx; font-weight:600; }
+.batch-toolbar-actions { display:flex; flex:1; justify-content:flex-end; align-items:center; gap:14rpx; color:#6d6056; font-size:20rpx; white-space:nowrap; }
+.batch-delete-action { color:#b5221e; font-weight:600; }
+.row-select-mark { display:inline-block; min-width:44rpx; line-height:48rpx; color:#a92822; font-size:32rpx; }
+.outgoing-record-table .row-select-mark { color:#286a6e; }
