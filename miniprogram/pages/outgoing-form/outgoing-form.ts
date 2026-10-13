@@ -14,7 +14,7 @@ Page({
     if (field === 'name') {
       const name = e.detail.value
       const keyword = name.trim().toLocaleLowerCase()
-      if (!keyword || this.data.id) { this.setData({ name, nameSuggestions: [] }); return }
+      if (!keyword) { this.setData({ name, nameSuggestions: [] }); return }
       const ledger = getLedger()
       const allNames = [...ledger.banquets.flatMap((banquet) => banquet.guests.map((guest) => guest.name)), ...ledger.outgoing.map((gift) => gift.name)]
       const uniqueNames = Array.from(new Set(allNames.map((item) => item.trim()).filter(Boolean)))
