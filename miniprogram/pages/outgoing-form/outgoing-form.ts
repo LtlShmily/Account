@@ -1,4 +1,17 @@
 import { getLedger, makeId, OutgoingGift, parseAmount, saveLedger, today } from '../../services/ledger'
+
+function fuzzyNameMatch(name: string, keyword: string): boolean {
+  const nameChars = Array.from(name.toLocaleLowerCase())
+  const keywordChars = Array.from(keyword.toLocaleLowerCase())
+  let nameIndex = 0
+  for (const char of keywordChars) {
+    const foundIndex = nameChars.indexOf(char, nameIndex)
+    if (foundIndex < 0) return false
+    nameIndex = foundIndex + 1
+  }
+  return true
+}
+
 Page({
   data: { id: '', title: '新增送礼记录', name: '', amount: '', date: today(), note: '', nameSuggestions: [] as string[] },
   onLoad(query: Record<string, string | undefined>) {
@@ -19,7 +32,7 @@ Page({
       const allNames = [...ledger.banquets.flatMap((banquet) => banquet.guests.map((guest) => guest.name)), ...ledger.outgoing.map((gift) => gift.name)]
       const uniqueNames = Array.from(new Set(allNames.map((item) => item.trim()).filter(Boolean)))
       const nameSuggestions = uniqueNames
-        .filter((item) => item.toLocaleLowerCase().includes(keyword))
+        .filter((item) => fuzzyNameMatch(item, keyword))
         .sort((first, second) => Number(second.toLocaleLowerCase().startsWith(keyword)) - Number(first.toLocaleLowerCase().startsWith(keyword)))
         .slice(0, 8)
       this.setData({ name, nameSuggestions })
