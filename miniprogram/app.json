@@ -1,13 +1,13 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/banquet-list/banquet-list",
+    "pages/banquet-detail/banquet-detail",
+    "pages/banquet-form/banquet-form",
+    "pages/outgoing-list/outgoing-list",
+    "pages/outgoing-form/outgoing-form"
   ],
-  "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarBackgroundColor": "#ffffff"
-  },
+  "window": { "navigationBarTextStyle": "white", "navigationBarTitleText": "礼金账本", "navigationBarBackgroundColor": "#b91f1b", "backgroundColor": "#fbf6ef" },
   "style": "v2",
   "componentFramework": "glass-easel",
   "lazyCodeLoading": "requiredComponents"

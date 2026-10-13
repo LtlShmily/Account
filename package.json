@@ -1,7 +1,7 @@
 {
-  "name": "miniprogram-ts-quickstart",
+  "name": "gift-ledger-miniprogram",
   "version": "1.0.0",
-  "description": "",
+  "description": "本地礼金收支账本微信小程序",
   "scripts": {
   },
   "keywords": [],

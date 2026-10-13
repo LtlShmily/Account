@@ -1,0 +1,11 @@
+<view class="page">
+  <view class="screen-title">{{title}}</view>
+  <view class="form-card">
+    <view class="field"><text class="field-label">收礼对象姓名 <text class="required">*</text></text><input class="field-input" value="{{name}}" data-field="name" bindinput="onTextInput" placeholder="请输入收礼对象姓名" maxlength="40" /></view>
+    <view class="field"><text class="field-label">金额 <text class="required">*</text></text><input class="field-input" type="digit" value="{{amount}}" data-field="amount" bindinput="onTextInput" placeholder="请输入金额" /><text class="field-hint">单位：元，最多两位小数</text></view>
+    <view class="field"><text class="field-label">收礼对象地址</text><input class="field-input" value="{{address}}" data-field="address" bindinput="onTextInput" placeholder="用于辨识同名对象（选填）" maxlength="100" /></view>
+    <view class="field"><text class="field-label">送礼日期 <text class="required">*</text></text><picker mode="date" value="{{date}}" bindchange="onDateChange"><view class="date-picker">▦　{{date}}　⌄</view></picker></view>
+    <view class="field"><text class="field-label">备注（可选）</text><textarea class="field-textarea" value="{{note}}" data-field="note" bindinput="onTextInput" placeholder="补充说明" maxlength="200" /></view>
+  </view>
+  <view class="primary-button teal-button" bindtap="save">保存</view>
+</view>

@@ -1,27 +1,22 @@
-<!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
-    </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
-    </view>
+<view class="page home-page">
+  <view class="hero">
+    <view class="hero-cloud cloud-one">❋</view><view class="hero-cloud cloud-two">⌁</view>
+    <text class="hero-title">礼金账本</text><text class="hero-subtitle">记录人情往来 · 留住每份心意</text><view class="hero-seal">囍</view>
   </view>
-</scroll-view>
+  <view class="entry-row">
+    <view class="entry-card entry-receive" bindtap="openReceived"><view class="entry-icon">收</view><text class="entry-title">收取礼金</text><text class="entry-caption">记录宴席收到的礼金</text><text class="entry-arrow">›</text></view>
+    <view class="entry-card entry-send" bindtap="openSent"><view class="entry-icon">送</view><text class="entry-title">送出礼金</text><text class="entry-caption">记录送给亲友的礼金</text><text class="entry-arrow">›</text></view>
+  </view>
+  <view class="section-title"><text>收支统计</text><text class="section-note">累计往来</text></view>
+  <view class="summary-card">
+    <view class="summary-item"><text class="summary-label">累计收取</text><text class="summary-value red">¥{{received}}</text></view><view class="summary-divider"></view>
+    <view class="summary-item"><text class="summary-label">累计送出</text><text class="summary-value teal">¥{{sent}}</text></view><view class="summary-divider"></view>
+    <view class="summary-item"><text class="summary-label">往来净额</text><text class="summary-value dark">¥{{balance}}</text></view>
+  </view>
+  <view class="section-title recent-heading"><text>近期记录</text><text class="section-note">最近 6 笔</text></view>
+  <view wx:if="{{recent.length}}" class="recent-card">
+    <view wx:for="{{recent}}" wx:key="id" class="recent-row"><view class="record-badge {{item.typeClass}}">{{item.type}}</view><view class="recent-main"><text class="recent-name">{{item.name}}</text><text class="recent-detail">{{item.detail}} · {{item.date}}</text></view><text class="recent-amount {{item.typeClass}}">{{item.amount}}</text></view>
+  </view>
+  <view wx:else class="empty-card"><text class="empty-mark">✦</text><text>还没有礼金记录</text><text class="empty-hint">从上方选择收取或送出礼金开始记账</text></view>
+  <view class="footer-note">一笔一记，心意有迹可循</view>
+</view>

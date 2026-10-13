@@ -1,0 +1,11 @@
+<view class="page">
+  <view class="screen-title">送出礼金</view>
+  <view class="summary-strip"><view><text class="summary-strip-title">当前筛选合计</text><text class="subtle" style="display:block;margin-top:8rpx">{{resultCount}} 笔记录</text></view><text class="summary-strip-amount">¥{{total}}</text></view>
+  <view class="primary-button teal-button" bindtap="createGift">＋　新增送礼记录</view>
+  <view class="toolbar"><view class="search-box">⌕　<input placeholder="搜索姓名或地址" value="{{keyword}}" bindinput="search" /></view><view class="month-box"><picker mode="selector" range="{{months}}" value="{{monthIndex}}" bindchange="chooseMonth">{{months[monthIndex]}}　⌄</picker></view></view>
+  <view wx:if="{{items.length}}" class="table">
+    <view class="table-head teal-head"><text class="cell cell-name">收礼对象</text><text class="cell">金额</text><text class="cell">地址</text><text class="cell">操作</text></view>
+    <view wx:for="{{items}}" wx:key="id" class="table-row"><view class="cell cell-name"><text>{{item.name}}</text><text class="cell-sub">{{item.date}}</text></view><text class="cell cell-amount">{{item.amount}}</text><text class="cell">{{item.address}}</text><view class="row-actions" style="color:#286a6e"><text data-id="{{item.id}}" bindtap="editGift">改</text><text data-id="{{item.id}}" bindtap="deleteGift">删</text></view></view>
+  </view>
+  <view wx:else class="empty-card"><text class="empty-mark" style="color:#3b7777">✦</text><text>没有符合条件的送礼记录</text><text class="empty-hint">可调整月份或添加一笔新记录</text></view>
+</view>

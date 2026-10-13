@@ -1,0 +1,11 @@
+<view class="page">
+  <view class="detail-head"><view class="detail-name">{{name}}</view><view class="detail-meta">▦　{{date}}　⌖　{{location}}</view><view class="row-actions" style="margin-top:16rpx"><text bindtap="editBanquet">编辑宴席信息</text></view></view>
+  <view class="total-banner"><view><view class="subtle">收到礼金合计</view><view class="detail-meta">{{count}} 位来宾</view></view><text class="total-number">¥{{total}}</text></view>
+  <view class="primary-button" bindtap="createGuest">＋　新增收礼记录</view>
+  <view class="toolbar"><view class="search-box">⌕　<input placeholder="搜索来宾姓名" value="{{keyword}}" bindinput="search" /></view></view>
+  <view wx:if="{{guests.length}}" class="table">
+    <view class="table-head"><text class="cell cell-name">姓名</text><text class="cell">金额</text><text class="cell">备注</text><text class="cell">操作</text></view>
+    <view wx:for="{{guests}}" wx:key="id" class="table-row"><view class="cell cell-name"><text>{{item.name}}</text><text class="cell-sub">{{item.date}}</text></view><text class="cell cell-amount">{{item.amount}}</text><text class="cell">{{item.address}}</text><view class="row-actions"><text data-id="{{item.id}}" bindtap="editGuest">改</text><text data-id="{{item.id}}" bindtap="deleteGuest">删</text></view></view>
+  </view>
+  <view wx:else class="empty-card"><text class="empty-mark">✦</text><text>还没有来宾礼金</text><text class="empty-hint">添加第一笔记录，宴席合计会自动更新</text></view>
+</view>
