@@ -1,6 +1,6 @@
 import { getLedger, makeId, OutgoingGift, parseAmount, saveLedger, today } from '../../services/ledger'
 Page({
-  data: { id: '', title: '新增送礼记录', name: '', amount: '', date: today(), note: '' },
+  data: { id: '', title: '新增送礼记录', name: '', amount: '', date: today(), note: '', nameSuggestions: [] as string[] },
   onLoad(query: Record<string, string | undefined>) {
     const id = query.id || ''
     if (id) {
@@ -11,9 +11,25 @@ Page({
   onReady() { wx.setNavigationBarTitle({ title: this.data.title }) },
   onTextInput(e: WechatMiniprogram.Input) {
     const field = String(e.currentTarget.dataset.field)
-    if (field === 'name') this.setData({ name: e.detail.value })
+    if (field === 'name') {
+      const name = e.detail.value
+      const keyword = name.trim().toLocaleLowerCase()
+      if (!keyword || this.data.id) { this.setData({ name, nameSuggestions: [] }); return }
+      const ledger = getLedger()
+      const allNames = [...ledger.banquets.flatMap((banquet) => banquet.guests.map((guest) => guest.name)), ...ledger.outgoing.map((gift) => gift.name)]
+      const uniqueNames = Array.from(new Set(allNames.map((item) => item.trim()).filter(Boolean)))
+      const nameSuggestions = uniqueNames
+        .filter((item) => item.toLocaleLowerCase().includes(keyword))
+        .sort((first, second) => Number(second.toLocaleLowerCase().startsWith(keyword)) - Number(first.toLocaleLowerCase().startsWith(keyword)))
+        .slice(0, 8)
+      this.setData({ name, nameSuggestions })
+    }
     else if (field === 'amount') this.setData({ amount: e.detail.value })
     else if (field === 'note') this.setData({ note: e.detail.value })
+  },
+  chooseNameSuggestion(e: WechatMiniprogram.TouchEvent) {
+    const name = String(e.currentTarget.dataset.name || '')
+    if (name) this.setData({ name, nameSuggestions: [] })
   },
   onDateChange(e: WechatMiniprogram.PickerChange) { this.setData({ date: String(e.detail.value) }) },
   save() {
