@@ -130,3 +130,7 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .suggestion-heading { display:block; padding:12rpx 16rpx 6rpx; color:#a29488; font-size:19rpx; }
 .name-suggestion { display:flex; align-items:center; justify-content:space-between; min-height:68rpx; padding:0 16rpx; border-top:1rpx solid #f0e8df; color:#392f29; font-size:23rpx; }
 .suggestion-use { color:#327573; font-size:20rpx; }
+.alphabet-index { position:fixed; z-index:20; top:50%; right:2rpx; display:flex; flex-direction:column; align-items:center; transform:translateY(-50%); padding:4rpx 0; }
+.alphabet-index-letter { width:26rpx; height:20rpx; line-height:20rpx; text-align:center; font-size:16rpx; font-weight:600; }
+.alphabet-index-active { color:#286a6e; }
+.alphabet-index-inactive { color:#cfc6bd; }

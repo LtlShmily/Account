@@ -11,7 +11,7 @@
     <text class="subtle">共 {{rows.length}} 人</text>
   </view>
   <view wx:if="{{rows.length}}" class="people-list">
-    <view wx:for="{{rows}}" wx:key="key" class="person-summary-row" data-name="{{item.name}}" bindtap="openPerson">
+    <view wx:for="{{rows}}" wx:key="key" id="{{item.anchorId}}" class="person-summary-row" data-name="{{item.name}}" bindtap="openPerson">
       <view class="person-avatar">{{item.initial}}</view>
       <view class="person-summary-main">
         <text class="person-name">{{item.name}}</text>
@@ -22,4 +22,7 @@
     </view>
   </view>
   <view wx:else class="empty-card"><text class="empty-mark">✦</text><text>{{keyword ? '没有匹配的姓名' : '还没有收支记录'}}</text><text class="empty-hint">添加收礼或送礼记录后，这里会按姓名汇总</text></view>
+  <view wx:if="{{rows.length}}" class="alphabet-index">
+    <text wx:for="{{indexLetters}}" wx:key="letter" class="alphabet-index-letter {{item.active ? 'alphabet-index-active' : 'alphabet-index-inactive'}}" data-letter="{{item.letter}}" catchtap="jumpToLetter">{{item.letter}}</text>
+  </view>
 </view>
