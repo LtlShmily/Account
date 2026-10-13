@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/summary/summary",
     "pages/person-detail/person-detail",
+    "pages/batch-import/batch-import",
     "pages/banquet-list/banquet-list",
     "pages/banquet-detail/banquet-detail",
     "pages/banquet-form/banquet-form",

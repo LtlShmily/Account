@@ -17,6 +17,7 @@
         <view class="transaction-title-line"><text class="transaction-type-label">{{item.typeLabel}}</text><text class="transaction-date">{{item.date}}</text></view>
         <text class="transaction-context">{{item.context}}</text>
         <text wx:if="{{item.address}}" class="transaction-address">{{item.address}}</text>
+        <text wx:if="{{item.gift}}" class="transaction-gift">礼品：{{item.gift}}</text>
       </view>
       <view class="transaction-trailing"><text class="transaction-amount {{item.type}}">{{item.amountPrefix}}¥{{item.amount}}</text><text class="transaction-chevron">›</text></view>
     </view>

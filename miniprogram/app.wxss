@@ -89,3 +89,21 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .transaction-amount { font-size:24rpx; font-weight:600; white-space:nowrap; }.transaction-amount.income { color:#b72420; }.transaction-amount.expense { color:#286a6e; }
 .transaction-chevron { color:#b6a08e; font-size:34rpx; }
 .source-guest-row { background:#fff0d4; box-shadow:inset 6rpx 0 #bf3027; }
+.import-guests-button { min-height:70rpx; margin:12rpx 0 16rpx; border:1rpx solid #e9c7a3; border-radius:14rpx; color:#a72720; background:linear-gradient(100deg,#fffaf3,#fff1e2); box-shadow:none; font-size:25rpx; }
+.batch-import-page { padding-top:20rpx; }
+.batch-import-heading { display:flex; flex-direction:column; align-items:center; margin:16rpx 0 26rpx; padding:30rpx 20rpx; border-radius:18rpx; color:#fff7eb; background:linear-gradient(135deg,#c6221e,#a91317 70%,#8e1118); }
+.batch-import-title { font-size:42rpx; font-weight:700; letter-spacing:8rpx; }
+.batch-import-subtitle { margin-top:10rpx; color:#f5d9bb; font-size:22rpx; }
+.batch-import-card { padding:22rpx 20rpx; }
+.batch-label { display:block; margin-bottom:14rpx; color:#493c35; font-size:25rpx; font-weight:600; }
+.batch-textarea { display:block; width:100%; min-height:500rpx; padding:20rpx; border:1rpx solid #e7d8c8; border-radius:14rpx; background:#fffdfa; color:#342c27; font-size:25rpx; line-height:1.7; }
+.batch-count { display:block; margin-top:10rpx; color:#9d9085; font-size:20rpx; text-align:right; }
+.batch-format-note { display:flex; flex-direction:column; gap:10rpx; margin-top:22rpx; padding:20rpx; border-radius:14rpx; background:#f8f2eb; }
+.batch-format-title { margin-bottom:2rpx; color:#67452f; font-size:25rpx; font-weight:600; }
+.batch-format-line { color:#84776d; font-size:21rpx; line-height:1.5; }
+.batch-import-action { margin:28rpx 20rpx 12rpx; }
+.transaction-gift { overflow:hidden; color:#98734e; font-size:20rpx; white-space:nowrap; text-overflow:ellipsis; }
+.gift-cell { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.table-scroll { width:100%; white-space:nowrap; }
+.banquet-guest-table { width:1080rpx; }
+.outgoing-gift-table { width:900rpx; }

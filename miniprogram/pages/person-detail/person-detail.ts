@@ -11,6 +11,7 @@ interface TransactionRow {
   amount: string
   context: string
   address: string
+  gift: string
   sourceId: string
 }
 
@@ -48,6 +49,7 @@ Page({
       amount: money(item.amount),
       context: item.type === 'income' ? item.banquetName : '送给 ' + name,
       address: item.address,
+      gift: item.gift,
       sourceId: item.type === 'income' ? item.banquetId : item.id,
     }))
     this.setData({
