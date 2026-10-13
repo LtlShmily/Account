@@ -25,7 +25,7 @@ Page({
     const keyword = this.data.keyword.trim().toLocaleLowerCase()
     const rows = getPeopleSummary()
       .filter((person) => !keyword || person.name.toLocaleLowerCase().includes(keyword))
-      .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
+      .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN-u-co-pinyin', { sensitivity: 'base' }))
       .map((person) => ({
         key: person.name.toLocaleLowerCase(),
         name: person.name,
