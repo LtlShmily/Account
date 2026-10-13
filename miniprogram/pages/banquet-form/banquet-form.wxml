@@ -1,13 +1,10 @@
 <view class="page">
   <view class="screen-title">{{title}}</view>
-  <view wx:if="{{kind === 'guest'}}" class="subtle" style="margin-top:-12rpx;margin-bottom:18rpx">登记这场宴席收到的礼金</view>
   <view class="form-card">
-    <view class="field"><text class="field-label">{{kind === 'guest' ? '姓名' : '宴席名称'}} <text class="required">*</text></text><input class="field-input" value="{{name}}" data-field="name" bindinput="onTextInput" placeholder="{{kind === 'guest' ? '请输入来宾姓名' : '例如：周子其婚宴'}}" maxlength="40" /></view>
-    <view wx:if="{{kind === 'guest'}}" class="field"><text class="field-label">金额 <text class="required">*</text></text><input class="field-input" type="digit" value="{{amount}}" data-field="amount" bindinput="onTextInput" placeholder="请输入金额" /><text class="field-hint">单位：元，最多两位小数</text></view>
+    <view class="field"><text class="field-label">宴席名称 <text class="required">*</text></text><input class="field-input" value="{{name}}" data-field="name" bindinput="onTextInput" placeholder="例如：周子其婚宴" maxlength="40" /></view>
     <view class="field"><text class="field-label">日期 <text class="required">*</text></text><picker mode="date" value="{{date}}" bindchange="onDateChange"><view class="date-picker">▦　{{date}}　⌄</view></picker></view>
-    <view wx:if="{{kind === 'banquet'}}" class="field"><text class="field-label">宴席地址 <text class="required">*</text></text><input class="field-input" value="{{location}}" data-field="location" bindinput="onTextInput" placeholder="例如：雷打坡酒楼" maxlength="80" /></view>
-    <view wx:else class="field"><text class="field-label">备注</text><input class="field-input" value="{{location}}" data-field="location" bindinput="onTextInput" placeholder="地址或其他辨识信息（选填）" maxlength="80" /></view>
-    <view wx:if="{{kind === 'banquet'}}" class="field"><text class="field-label">备注（可选）</text><textarea class="field-textarea" value="{{note}}" data-field="note" bindinput="onTextInput" placeholder="补充说明" maxlength="200" /></view>
+    <view class="field"><text class="field-label">宴席地址 <text class="required">*</text></text><input class="field-input" value="{{location}}" data-field="location" bindinput="onTextInput" placeholder="例如：雷打坡酒楼" maxlength="80" /></view>
+    <view class="field"><text class="field-label">备注（可选）</text><textarea class="field-textarea" value="{{note}}" data-field="note" bindinput="onTextInput" placeholder="补充说明" maxlength="200" /></view>
   </view>
   <view class="primary-button" bindtap="save">保存</view>
 </view>
