@@ -104,13 +104,14 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .batch-import-action { margin:28rpx 20rpx 12rpx; }
 .outgoing-note-cell { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .banquet-guest-table,.outgoing-record-table { width:100%; }
-.banquet-guest-table .cell,.outgoing-record-table .cell { padding-left:3rpx; padding-right:3rpx; font-size:19rpx; white-space:nowrap; }
+.banquet-guest-table .cell,.outgoing-record-table .cell { padding-left:3rpx; padding-right:3rpx; font-size:23rpx; white-space:nowrap; }
+.banquet-guest-table .cell-input { font-size:23rpx; }
+.banquet-guest-table .table-row .delete-cell,.outgoing-record-table .table-row .delete-cell,.outgoing-record-table .table-row .row-actions { font-size:23rpx; }
 .banquet-guest-table .cell-name { flex:1.05; min-width:0; }
 .banquet-guest-table .cell:nth-child(2) { flex:.72; }
 .banquet-guest-table .cell:nth-child(3) { flex:1.1; }
 .banquet-guest-table .cell-action { width:58rpx; }
-.banquet-guest-table .cell-input { padding:0 1rpx; font-size:19rpx; }
-.banquet-guest-table .cell-input-amount { font-size:19rpx; }
+.banquet-guest-table .cell-input { padding:0 1rpx; }
 .compact-delete { display:inline-flex; align-items:center; justify-content:center; width:42rpx; height:44rpx; border-radius:9rpx; color:#a62620; background:#fff0ed; font-size:20rpx; }
 .outgoing-record-table .cell-name { flex:1.1; min-width:0; }
 .outgoing-record-table .table-row > .cell:nth-child(2) { flex:.65; }
