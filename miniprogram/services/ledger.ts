@@ -12,7 +12,6 @@ export interface GuestGift {
   name: string
   amount: number
   address: string
-  gift: string
   date: string
 }
 
@@ -20,10 +19,8 @@ export interface OutgoingGift {
   id: string
   name: string
   amount: number
-  address: string
   date: string
   note: string
-  gift: string
 }
 
 export interface LedgerData {
@@ -37,8 +34,7 @@ export interface PersonTransaction {
   type: 'income' | 'expense'
   amount: number
   date: string
-  address: string
-  gift: string
+  remark: string
   banquetId: string
   banquetName: string
 }
@@ -55,8 +51,20 @@ const STORAGE_KEY = 'gift-ledger-v1'
 export function ensureStore(): LedgerData {
   const value = wx.getStorageSync(STORAGE_KEY) as Partial<LedgerData> | undefined
   if (value && value.version === 1 && Array.isArray(value.banquets) && Array.isArray(value.outgoing)) {
-    value.banquets.forEach((banquet) => banquet.guests.forEach((guest) => { guest.gift = guest.gift || '' }))
-    value.outgoing.forEach((gift) => { gift.gift = gift.gift || '' })
+    let migrated = false
+    const oldBanquets = value.banquets as (Banquet & { guests: (GuestGift & { gift?: string })[] })[]
+    oldBanquets.forEach((banquet) => banquet.guests.forEach((guest) => {
+      if (guest.gift !== undefined) migrated = true
+      delete guest.gift
+    }))
+    const oldOutgoing = value.outgoing as (OutgoingGift & { address?: string; gift?: string })[]
+    oldOutgoing.forEach((record) => {
+      if (record.address !== undefined || record.gift !== undefined) migrated = true
+      record.note = [record.address, record.note].map((item) => (item || '').trim()).filter(Boolean).join('；')
+      delete record.address
+      delete record.gift
+    })
+    if (migrated) wx.setStorageSync(STORAGE_KEY, value)
     return value as LedgerData
   }
   const fresh: LedgerData = { version: 1, banquets: [], outgoing: [] }
@@ -118,12 +126,12 @@ export function getPersonTransactions(name: string): PersonTransaction[] {
   for (const banquet of ledger.banquets) {
     for (const guest of banquet.guests) {
       if (personKey(guest.name) !== key) continue
-      transactions.push({ id: guest.id, type: 'income', amount: guest.amount, date: guest.date || banquet.date, address: guest.address, gift: guest.gift || '', banquetId: banquet.id, banquetName: banquet.name })
+      transactions.push({ id: guest.id, type: 'income', amount: guest.amount, date: guest.date || banquet.date, remark: guest.address, banquetId: banquet.id, banquetName: banquet.name })
     }
   }
   for (const gift of ledger.outgoing) {
     if (personKey(gift.name) !== key) continue
-    transactions.push({ id: gift.id, type: 'expense', amount: gift.amount, date: gift.date, address: gift.address, gift: gift.gift || '', banquetId: '', banquetName: '' })
+    transactions.push({ id: gift.id, type: 'expense', amount: gift.amount, date: gift.date, remark: gift.note, banquetId: '', banquetName: '' })
   }
   return transactions.sort((a, b) => b.date.localeCompare(a.date))
 }

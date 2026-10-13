@@ -10,8 +10,7 @@ interface TransactionRow {
   date: string
   amount: string
   context: string
-  address: string
-  gift: string
+  remark: string
   sourceId: string
 }
 
@@ -48,8 +47,7 @@ Page({
       date: formatDate(item.date),
       amount: money(item.amount),
       context: item.type === 'income' ? item.banquetName : '送给 ' + name,
-      address: item.address,
-      gift: item.gift,
+      remark: item.remark,
       sourceId: item.type === 'income' ? item.banquetId : item.id,
     }))
     this.setData({

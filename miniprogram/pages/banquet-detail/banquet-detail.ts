@@ -1,9 +1,9 @@
 import { banquetTotal, formatDate, getLedger, GuestGift, makeId, money, parseAmount, saveLedger } from '../../services/ledger'
 
-interface GuestRow { id: string; recordId: string; name: string; amount: string; address: string; gift: string; date: string; isDraft: boolean }
+interface GuestRow { id: string; recordId: string; name: string; amount: string; address: string; date: string; isDraft: boolean }
 
 function emptyGuestRow(): GuestRow {
-  return { id: `draft-${makeId()}`, recordId: '', name: '', amount: '', address: '', gift: '', date: '', isDraft: true }
+  return { id: `draft-${makeId()}`, recordId: '', name: '', amount: '', address: '', date: '', isDraft: true }
 }
 
 Page({
@@ -15,9 +15,9 @@ Page({
     if (!banquet) { wx.showToast({ title: '宴席不存在', icon: 'none' }); setTimeout(() => wx.navigateBack(), 500); return }
     const keyword = this.data.keyword.trim().toLocaleLowerCase()
     const savedRows: GuestRow[] = banquet.guests
-      .map((guest) => ({ id: guest.id, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, gift: guest.gift || '', date: guest.date, isDraft: false }))
+      .map((guest) => ({ id: guest.id, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, date: guest.date, isDraft: false }))
       .filter((guest) => !keyword || guest.name.toLocaleLowerCase().includes(keyword))
-    const partialRows = this.data.guests.filter((guest) => guest.isDraft && (guest.name.trim() || guest.amount.trim() || guest.address.trim() || guest.gift.trim()))
+    const partialRows = this.data.guests.filter((guest) => guest.isDraft && (guest.name.trim() || guest.amount.trim() || guest.address.trim()))
     this.setData({
       name: banquet.name,
       date: formatDate(banquet.date),
@@ -39,15 +39,14 @@ Page({
     if (field === 'name') row.name = e.detail.value
     else if (field === 'amount') row.amount = e.detail.value
     else if (field === 'address') row.address = e.detail.value
-    else if (field === 'gift') row.gift = e.detail.value
-    if (row.isDraft && (row.name.trim() || row.amount.trim() || row.address.trim() || row.gift.trim()) && !rows.some((item) => item.isDraft && item.id !== id)) rows.push(emptyGuestRow())
+    if (row.isDraft && (row.name.trim() || row.amount.trim() || row.address.trim()) && !rows.some((item) => item.isDraft && item.id !== id)) rows.push(emptyGuestRow())
     this.setData({ guests: rows })
   },
   onCellBlur(e: WechatMiniprogram.Input) {
     const id = String(e.currentTarget.dataset.id)
     const row = this.data.guests.find((item) => item.id === id)
     if (!row) return
-    if (row.isDraft && !row.name.trim() && !row.amount.trim() && !row.address.trim() && !row.gift.trim()) return
+    if (row.isDraft && !row.name.trim() && !row.amount.trim() && !row.address.trim()) return
     if (!row.name.trim()) {
       if (row.isDraft && !row.amount.trim()) return
       if (row.isDraft) { wx.showToast({ title: '请填写姓名', icon: 'none' }); return }
@@ -63,9 +62,9 @@ Page({
     const banquet = ledger.banquets.find((item) => item.id === this.data.id)
     if (!banquet) { wx.showToast({ title: '宴席不存在', icon: 'none' }); this.refresh(); return }
     if (row.isDraft) {
-      const guest: GuestGift = { id: makeId(), name: row.name.trim(), amount, address: row.address.trim(), gift: row.gift.trim(), date: banquet.date }
+      const guest: GuestGift = { id: makeId(), name: row.name.trim(), amount, address: row.address.trim(), date: banquet.date }
       banquet.guests.unshift(guest)
-      const rows = this.data.guests.map((item) => item.id === id ? { ...row, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, gift: guest.gift, date: guest.date, isDraft: false } : item)
+      const rows = this.data.guests.map((item) => item.id === id ? { ...row, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, date: guest.date, isDraft: false } : item)
       saveLedger(ledger)
       this.setData({ guests: rows, total: money(banquetTotal(banquet)), count: banquet.guests.length })
       return
@@ -75,8 +74,7 @@ Page({
     guest.name = row.name.trim()
     guest.amount = amount
     guest.address = row.address.trim()
-    guest.gift = row.gift.trim()
-    const updatedRow = { ...row, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, gift: guest.gift }
+    const updatedRow = { ...row, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address }
     saveLedger(ledger)
     this.setData({ guests: this.data.guests.map((item) => item.id === row.id ? updatedRow : item), total: money(banquetTotal(banquet)), count: banquet.guests.length })
   },

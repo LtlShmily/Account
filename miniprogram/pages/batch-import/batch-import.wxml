@@ -6,12 +6,11 @@
     <text class="batch-count">{{lineCount}} 条</text>
     <view class="batch-format-note">
       <text class="batch-format-title">格式说明</text>
-      <text wx:if="{{importType === 'income'}}" class="batch-format-line">• 每行一条，按“名字、金额、备注、礼品”排列。</text>
-      <text wx:else class="batch-format-line">• 每行一条，按“收礼对象、金额、地址、礼品”排列。</text>
+      <text wx:if="{{importType === 'income'}}" class="batch-format-line">• 每行一条，按“名字、金额、备注”排列。</text>
+      <text wx:else class="batch-format-line">• 每行一条，按“收礼对象、金额、备注”排列。</text>
       <text class="batch-format-line">• 列之间用制表符或两个及以上空格分隔；也可直接粘贴表格单元格。</text>
-      <text class="batch-format-line">• {{fieldName}}和金额必填；{{fieldThird}}、礼品可留空。金额单位为元，例如 200。</text>
-      <text class="batch-format-line">• 任一行缺少姓名或金额、金额无效或列数超出 4 列，整批导入都会失败。</text>
-      <text class="batch-format-line">• 礼品仅作记录，不计入金额。</text>
+      <text class="batch-format-line">• {{fieldName}}和金额必填；{{fieldThird}}可留空。金额单位为元，例如 200。</text>
+      <text class="batch-format-line">• 任一行缺少姓名或金额、金额无效或列数超出 3 列，整批导入都会失败。</text>
     </view>
     <view class="primary-button batch-import-action" bindtap="importRecords">导入 {{lineCount}} 条记录</view>
   </view>

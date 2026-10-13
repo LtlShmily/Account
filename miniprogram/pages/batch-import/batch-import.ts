@@ -1,12 +1,12 @@
 import { getLedger, makeId, saveLedger, today } from '../../services/ledger'
-import { parseBatchGiftText } from '../../services/batch-import'
+import { parseBatchRecordText } from '../../services/batch-import'
 
 Page({
-  data: { importType: 'income', banquetId: '', banquetName: '', pageTitle: '批量导入收礼记录', fieldName: '名字', fieldThird: '备注', exampleText: '姓名  金额  备注  礼品\n周子其  200  雷打坡  酒\n黄朋  100  翁刚  衣服', content: '', lineCount: 0 },
+  data: { importType: 'income', banquetId: '', banquetName: '', pageTitle: '批量导入收礼记录', fieldName: '名字', fieldThird: '备注', exampleText: '姓名  金额  备注\n周子其  200  雷打坡\n黄朋  100  翁刚', content: '', lineCount: 0 },
   onReady() { wx.setNavigationBarTitle({ title: this.data.pageTitle }) },
   onLoad(query: Record<string, string | undefined>) {
     if (query.type === 'outgoing') {
-      this.setData({ importType: 'outgoing', banquetName: '送出礼金', pageTitle: '批量导入送礼记录', fieldName: '收礼对象', fieldThird: '地址', exampleText: '收礼对象  金额  地址  礼品\n张三  200  XX小区  酒\n李四  100  XX村  衣服' })
+      this.setData({ importType: 'outgoing', banquetName: '送出礼金', pageTitle: '批量导入送礼记录', fieldName: '收礼对象', fieldThird: '备注', exampleText: '收礼对象  金额  备注\n张三  200  XX小区\n李四  100  其他说明' })
       return
     }
     const banquetId = query.banquetId || ''
@@ -23,7 +23,7 @@ Page({
     this.setData({ content, lineCount: content.split(/\r?\n/).filter((line) => line.trim()).length })
   },
   importRecords() {
-    const parsed = parseBatchGiftText(this.data.content)
+    const parsed = parseBatchRecordText(this.data.content)
     if (parsed.error) {
       wx.showModal({ title: '导入失败', content: parsed.error, showCancel: false, confirmText: '检查格式' })
       return
@@ -31,7 +31,7 @@ Page({
     const ledger = getLedger()
     let importedCount = 0
     if (this.data.importType === 'outgoing') {
-      const imported = parsed.rows.map((row) => ({ id: makeId(), name: row.name, amount: row.amount, address: row.address, date: today(), note: '', gift: row.gift }))
+      const imported = parsed.rows.map((row) => ({ id: makeId(), name: row.name, amount: row.amount, date: today(), note: row.remark }))
       ledger.outgoing = [...imported, ...ledger.outgoing]
       importedCount = imported.length
     } else {
@@ -40,7 +40,7 @@ Page({
         wx.showToast({ title: '宴席不存在，请返回重试', icon: 'none' })
         return
       }
-      const imported = parsed.rows.map((row) => ({ id: makeId(), name: row.name, amount: row.amount, address: row.address, gift: row.gift, date: banquet.date }))
+      const imported = parsed.rows.map((row) => ({ id: makeId(), name: row.name, amount: row.amount, address: row.remark, date: banquet.date }))
       banquet.guests = [...imported, ...banquet.guests]
       importedCount = imported.length
     }
