@@ -32,5 +32,20 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .delete-cell { color:#aa5148; font-size:19rpx; }
 .draft-mark { color:#bf9d72; font-size:26rpx; }
 .inline-help { padding:16rpx 18rpx 0; color:#9a8877; font-size:21rpx; line-height:1.6; }
+.summary-page { padding-bottom:50rpx; }
+.summary-overview { margin-bottom:18rpx; }
+.summary-explain { margin:8rpx 2rpx 12rpx; color:#95877b; font-size:21rpx; line-height:1.6; }
+.summary-scroll { width:100%; white-space:nowrap; border:1rpx solid #e7ddd0; border-radius:14rpx; background:#fffdf9; }
+.summary-grid { display:inline-block; min-width:100%; }
+.summary-table-head,.summary-table-row { display:flex; align-items:stretch; min-height:82rpx; border-bottom:1rpx solid #e8dfd5; }
+.summary-table-head { min-height:76rpx; color:#fff; background:#286a6e; font-size:21rpx; font-weight:600; }
+.summary-name-head,.summary-name-cell { flex:none; width:166rpx; display:flex; align-items:center; justify-content:center; border-right:1rpx solid #e8dfd5; }
+.summary-name-cell { color:#47372f; font-size:23rpx; font-weight:600; background:#fffdf9; }
+.summary-data-cell { flex:none; width:152rpx; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8rpx 5rpx; border-right:1rpx solid #eee6dc; color:#332b25; font-size:20rpx; text-align:center; white-space:normal; }
+.summary-head-cell { color:#fff; border-color:rgba(255,255,255,.22); }
+.income-cell,.income-total { color:#ad2822; }.expense-cell,.expense-total { color:#286a6e; }
+.income-total,.expense-total { width:180rpx; font-weight:600; background:#fbf6ef; }
+.balance-column { width:230rpx; font-weight:600; background:#f7f3ed; }.positive-balance { color:#ad2822; }.negative-balance { color:#286a6e; }
+.summary-date { margin-top:5rpx; color:#a99b8e; font-size:16rpx; font-weight:400; }
 .form-card { padding:25rpx 22rpx; border-radius:18rpx; border:1rpx solid #eee2d5; background:rgba(255,255,255,.78); }.field { margin-bottom:23rpx; }.field-label { display:block; margin-bottom:10rpx; color:#62443a; font-size:23rpx; font-weight:600; }.required { color:#c12420; }.field-input,.field-textarea,.date-picker { width:100%; min-height:76rpx; padding:0 18rpx; border:1rpx solid #e8ddd1; border-radius:14rpx; background:#fffdfa; color:#392f29; font-size:24rpx; }.field-input { display:flex; align-items:center; }.field-textarea { padding-top:16rpx; min-height:136rpx; }.date-picker { display:flex; align-items:center; }.field-hint { display:block; margin-top:8rpx; color:#b0a397; font-size:20rpx; }
 .summary-strip { display:flex; justify-content:space-between; align-items:center; padding:20rpx 22rpx; margin-bottom:18rpx; border-radius:16rpx; background:#fff; border:1rpx solid #eee3d7; }.summary-strip-title { color:#6b5c50; font-size:22rpx; }.summary-strip-amount { color:#245f63; font-size:36rpx; font-weight:700; }

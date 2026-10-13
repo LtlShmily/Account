@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/summary/summary",
     "pages/banquet-list/banquet-list",
     "pages/banquet-detail/banquet-detail",
     "pages/banquet-form/banquet-form",
@@ -10,5 +11,15 @@
   "window": { "navigationBarTextStyle": "white", "navigationBarTitleText": "礼金账本", "navigationBarBackgroundColor": "#b91f1b", "backgroundColor": "#fbf6ef" },
   "style": "v2",
   "componentFramework": "glass-easel",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "tabBar": {
+    "color": "#8e8176",
+    "selectedColor": "#b91f1b",
+    "backgroundColor": "#fffdf9",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/summary/summary", "text": "总计" }
+    ]
+  }
 }
