@@ -1,4 +1,5 @@
 import { getLedger, money, totals } from '../../services/ledger'
+import { exportLedgerExcel, ExcelExportType } from '../../services/excel-export'
 
 interface RecentItem { id: string; type: string; typeClass: string; name: string; date: string; detail: string; amount: string }
 
@@ -14,4 +15,14 @@ Page({
   },
   openReceived() { wx.navigateTo({ url: '/pages/banquet-list/banquet-list' }) },
   openSent() { wx.navigateTo({ url: '/pages/outgoing-list/outgoing-list' }) },
+  exportData() {
+    const types: ExcelExportType[] = ['income', 'outgoing', 'summary', 'all']
+    wx.showActionSheet({
+      itemList: ['仅收取礼金', '仅送出礼金', '仅总计数据', '完整账本（3 个工作表）'],
+      success: (result) => {
+        const type = types[result.tapIndex]
+        if (type) exportLedgerExcel(type)
+      },
+    })
+  },
 })
