@@ -18,6 +18,14 @@ interface ZipEntry {
   offset: number
 }
 
+interface SummaryTransaction {
+  type: '收入' | '支出'
+  amount: number
+  date: string
+  source: string
+  remark: string
+}
+
 const XML_HEADER = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
 const INDEX_ORDER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
 
@@ -53,34 +61,49 @@ function createSheets(type: ExcelExportType): SheetData[] {
   const ledger = getLedger()
   const income: SheetData = {
     name: '收取礼金',
-    headers: ['宴席名称', '宴席日期', '宴席地点', '来宾姓名', '金额（元）', '备注'],
+    headers: ['来宾姓名', '金额（元）', '宴席地点', '备注', '宴席名称', '宴席日期'],
     rows: ledger.banquets.flatMap((banquet) => banquet.guests.map((guest) => [
-      banquet.name,
-      banquet.date,
-      banquet.location,
       guest.name,
       guest.amount / 100,
+      banquet.location,
       guest.address,
+      banquet.name,
+      banquet.date,
     ])),
-    amountColumns: [4],
-    widths: [22, 14, 24, 18, 14, 28],
+    amountColumns: [1],
+    widths: [18, 14, 24, 28, 22, 14],
   }
   const outgoing: SheetData = {
     name: '送出礼金',
-    headers: ['收礼对象', '金额（元）', '日期', '备注'],
-    rows: ledger.outgoing.map((gift) => [gift.name, gift.amount / 100, gift.date, gift.note]),
+    headers: ['收礼对象', '金额（元）', '备注', '日期'],
+    rows: ledger.outgoing.map((gift) => [gift.name, gift.amount / 100, gift.note, gift.date]),
     amountColumns: [1],
-    widths: [20, 14, 14, 30],
+    widths: [20, 14, 30, 14],
   }
   const incomeCounts = new Map<string, number>()
   const expenseCounts = new Map<string, number>()
+  const transactions = new Map<string, SummaryTransaction[]>()
   for (const banquet of ledger.banquets) {
     for (const guest of banquet.guests) {
       incrementCount(incomeCounts, guest.name)
+      addTransaction(transactions, guest.name, {
+        type: '收入',
+        amount: guest.amount,
+        date: guest.date || banquet.date,
+        source: banquet.name,
+        remark: guest.address,
+      })
     }
   }
   for (const gift of ledger.outgoing) {
     incrementCount(expenseCounts, gift.name)
+    addTransaction(transactions, gift.name, {
+      type: '支出',
+      amount: gift.amount,
+      date: gift.date,
+      source: '',
+      remark: gift.note,
+    })
   }
   const sortedPeople = getPeopleSummary()
     .map((person) => ({ person, initial: pinyinInitial(person.name), sortKey: pinyinSortKey(person.name) }))
@@ -89,14 +112,25 @@ function createSheets(type: ExcelExportType): SheetData[] {
       || compareText(first.person.name, second.person.name))
   const incomeTotal = ledger.banquets.reduce((sum, banquet) => sum + banquet.guests.reduce((guestSum, guest) => guestSum + guest.amount, 0), 0)
   const expenseTotal = ledger.outgoing.reduce((sum, gift) => sum + gift.amount, 0)
-  const summaryRows: Array<Array<string | number>> = sortedPeople.map(({ person }) => [
-    person.name,
-    person.income / 100,
-    person.expense / 100,
-    person.balance / 100,
-    incomeCounts.get(person.name.trim().toLocaleLowerCase()) || 0,
-    expenseCounts.get(person.name.trim().toLocaleLowerCase()) || 0,
-  ])
+  const summaryRows: Array<Array<string | number>> = sortedPeople.flatMap(({ person }) => {
+    const key = person.name.trim().toLocaleLowerCase()
+    const personTransactions = (transactions.get(key) || []).sort((first, second) => second.date.localeCompare(first.date)
+      || compareText(first.type, second.type)
+      || compareText(first.source, second.source))
+    return personTransactions.map((transaction) => [
+      person.name,
+      person.income / 100,
+      person.expense / 100,
+      person.balance / 100,
+      incomeCounts.get(key) || 0,
+      expenseCounts.get(key) || 0,
+      transaction.type,
+      transaction.amount / 100,
+      transaction.date,
+      transaction.source,
+      transaction.remark,
+    ])
+  })
   summaryRows.push([
     '合计',
     incomeTotal / 100,
@@ -104,13 +138,18 @@ function createSheets(type: ExcelExportType): SheetData[] {
     (incomeTotal - expenseTotal) / 100,
     Array.from(incomeCounts.values()).reduce((sum, count) => sum + count, 0),
     Array.from(expenseCounts.values()).reduce((sum, count) => sum + count, 0),
+    '',
+    '',
+    '',
+    '',
+    '',
   ])
   const summary: SheetData = {
     name: '总计数据',
-    headers: ['姓名', '收入合计（元）', '支出合计（元）', '差额（元）', '收入笔数', '支出笔数'],
+    headers: ['姓名', '收入合计（元）', '支出合计（元）', '差额（元）', '收入笔数', '支出笔数', '收支类型', '本笔金额（元）', '日期', '来源宴席', '备注'],
     rows: summaryRows,
-    amountColumns: [1, 2, 3],
-    widths: [20, 19, 19, 18, 14, 14],
+    amountColumns: [1, 2, 3, 7],
+    widths: [20, 19, 19, 18, 14, 14, 14, 18, 14, 22, 28],
   }
 
   if (type === 'income') return [income]
@@ -122,6 +161,14 @@ function createSheets(type: ExcelExportType): SheetData[] {
 function incrementCount(counts: Map<string, number>, name: string): void {
   const key = name.trim().toLocaleLowerCase()
   if (key) counts.set(key, (counts.get(key) || 0) + 1)
+}
+
+function addTransaction(transactions: Map<string, SummaryTransaction[]>, name: string, transaction: SummaryTransaction): void {
+  const key = name.trim().toLocaleLowerCase()
+  if (!key) return
+  const items = transactions.get(key) || []
+  items.push(transaction)
+  transactions.set(key, items)
 }
 
 function compareText(first: string, second: string): number {
