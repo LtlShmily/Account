@@ -1,5 +1,6 @@
-import { currentMonth, formatDate, getLedger, money, saveLedger } from '../../services/ledger'
+import { currentMonth, formatDate, getLedger, makeId, money, saveLedger, today } from '../../services/ledger'
 import { formatBatchImportText } from '../../services/batch-export'
+import { chooseExcelImport } from '../../services/excel-import'
 interface GiftView { id: string; name: string; amount: string; note: string; date: string; selected: boolean }
 Page({
   data: { items: [] as GiftView[], months: [] as string[], monthIndex: 0, keyword: '', total: '0.00', resultCount: 0, batchMode: false, selectedIds: [] as string[] },
@@ -17,6 +18,29 @@ Page({
   search(e: WechatMiniprogram.Input) { this.setData({ keyword: e.detail.value, selectedIds: [] }, () => this.refresh()) },
   createGift() { wx.navigateTo({ url: '/pages/outgoing-form/outgoing-form' }) },
   importGifts() { wx.navigateTo({ url: '/pages/batch-import/batch-import?type=outgoing' }) },
+  importGiftsFromExcel() {
+    chooseExcelImport((rows) => {
+      wx.showModal({
+        title: '确认导入送礼记录',
+        content: `文件校验通过，共 ${rows.length} 条记录。确认导入送出礼金吗？`,
+        confirmText: '导入',
+        success: (result) => {
+          if (!result.confirm) return
+          const ledger = getLedger()
+          const imported = rows.map((row) => ({ id: makeId(), name: row.name, amount: row.amount, date: today(), note: row.remark }))
+          ledger.outgoing = [...imported, ...ledger.outgoing]
+          try {
+            saveLedger(ledger)
+          } catch {
+            wx.showToast({ title: '保存失败，未完成导入', icon: 'none' })
+            return
+          }
+          this.refresh()
+          wx.showToast({ title: `已导入 ${imported.length} 笔`, icon: 'success' })
+        },
+      })
+    })
+  },
   toggleBatchMode() { this.setData({ batchMode: !this.data.batchMode, selectedIds: [] }, () => this.refresh()) },
   toggleSelected(e: WechatMiniprogram.TouchEvent) {
     const id = String(e.currentTarget.dataset.id || '')

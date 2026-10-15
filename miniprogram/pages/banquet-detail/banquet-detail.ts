@@ -1,5 +1,6 @@
 import { banquetTotal, formatDate, getLedger, GuestGift, makeId, money, parseAmount, saveLedger } from '../../services/ledger'
 import { formatBatchImportText } from '../../services/batch-export'
+import { chooseExcelImport } from '../../services/excel-import'
 
 interface GuestRow { id: string; recordId: string; name: string; amount: string; address: string; date: string; isDraft: boolean; selected: boolean }
 
@@ -115,6 +116,31 @@ Page({
   },
   editBanquet() { wx.navigateTo({ url: `/pages/banquet-form/banquet-form?id=${this.data.id}` }) },
   importGuests() { wx.navigateTo({ url: `/pages/batch-import/batch-import?banquetId=${encodeURIComponent(this.data.id)}` }) },
+  importGuestsFromExcel() {
+    chooseExcelImport((rows) => {
+      wx.showModal({
+        title: '确认导入收礼记录',
+        content: `文件校验通过，共 ${rows.length} 条记录。确认导入到当前宴席吗？`,
+        confirmText: '导入',
+        success: (result) => {
+          if (!result.confirm) return
+          const ledger = getLedger()
+          const banquet = ledger.banquets.find((item) => item.id === this.data.id)
+          if (!banquet) { wx.showToast({ title: '宴席不存在，未导入', icon: 'none' }); return }
+          const imported: GuestGift[] = rows.map((row) => ({ id: makeId(), name: row.name, amount: row.amount, address: row.remark, date: banquet.date }))
+          banquet.guests = [...imported, ...banquet.guests]
+          try {
+            saveLedger(ledger)
+          } catch {
+            wx.showToast({ title: '保存失败，未完成导入', icon: 'none' })
+            return
+          }
+          this.refresh()
+          wx.showToast({ title: `已导入 ${imported.length} 笔`, icon: 'success' })
+        },
+      })
+    })
+  },
   deleteGuest(e: WechatMiniprogram.TouchEvent) {
     const guestId = String(e.currentTarget.dataset.id)
     wx.showModal({ title: '删除这笔礼金？', content: '删除后无法恢复。', confirmColor: '#b91f1b', success: (result) => {

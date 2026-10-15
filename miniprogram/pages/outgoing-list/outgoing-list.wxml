@@ -2,7 +2,11 @@
   <view class="screen-title">送出礼金</view>
   <view class="summary-strip"><view><text class="summary-strip-title">当前筛选合计</text><text class="subtle" style="display:block;margin-top:8rpx">{{resultCount}} 笔记录</text></view><text class="summary-strip-amount">¥{{total}}</text></view>
   <view class="primary-button teal-button" bindtap="createGift">＋　新增送礼记录</view>
-  <view class="secondary-action outgoing-import-action" bindtap="importGifts">批量导入</view>
+  <view class="outgoing-import-actions">
+    <view class="secondary-action outgoing-import-action" bindtap="importGifts">批量导入</view>
+    <view class="excel-import-action outgoing-import-action" bindtap="importGiftsFromExcel">Excel 导入</view>
+  </view>
+  <text class="excel-import-hint outgoing-excel-import-hint">支持 .xlsx；表头需包含姓名和金额，备注或地址可选</text>
   <view class="toolbar"><view class="search-box">⌕　<input placeholder="搜索姓名或备注" value="{{keyword}}" bindinput="search" /></view><view class="month-box"><picker mode="selector" range="{{months}}" value="{{monthIndex}}" bindchange="chooseMonth">{{months[monthIndex]}}　⌄</picker></view></view>
   <view class="batch-toolbar">
     <text class="batch-mode-toggle" bindtap="toggleBatchMode">{{batchMode ? '完成' : '批量操作'}}</text>

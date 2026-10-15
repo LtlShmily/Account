@@ -93,7 +93,11 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .transaction-amount { font-size:24rpx; font-weight:600; white-space:nowrap; }.transaction-amount.income { color:#b72420; }.transaction-amount.expense { color:#286a6e; }
 .transaction-chevron { color:#b6a08e; font-size:34rpx; }
 .source-guest-row { background:#fff0d4; box-shadow:inset 6rpx 0 #bf3027; }
-.import-guests-button { min-height:70rpx; margin:12rpx 0 16rpx; border:1rpx solid #e9c7a3; border-radius:14rpx; color:#a72720; background:linear-gradient(100deg,#fffaf3,#fff1e2); box-shadow:none; font-size:25rpx; }
+.import-actions { display:flex; gap:14rpx; margin:12rpx 0 16rpx; }
+.import-action-button { flex:1; min-width:0; min-height:70rpx; margin:0; padding:0 8rpx; border:1rpx solid #e9c7a3; border-radius:14rpx; font-size:23rpx; }
+.import-guests-button { color:#a72720; background:linear-gradient(100deg,#fffaf3,#fff1e2); box-shadow:none; }
+.excel-import-action { display:flex; flex:1; align-items:center; justify-content:center; min-height:70rpx; padding:0 8rpx; border:1rpx solid #d7e5e2; border-radius:14rpx; color:#286a6e; background:#f7fbfa; text-align:center; font-size:23rpx; }
+.excel-import-hint { display:block; margin:-8rpx 2rpx 16rpx; color:#9c8f84; font-size:19rpx; line-height:1.5; }
 .batch-import-page { padding-top:20rpx; }
 .batch-import-heading { display:flex; flex-direction:column; align-items:center; margin:16rpx 0 26rpx; padding:30rpx 20rpx; border-radius:18rpx; color:#fff7eb; background:linear-gradient(135deg,#c6221e,#a91317 70%,#8e1118); }
 .batch-import-title { font-size:42rpx; font-weight:700; letter-spacing:8rpx; }
@@ -123,7 +127,9 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .outgoing-record-table .table-head > .cell:nth-child(2) { flex:.65; }
 .outgoing-record-table .table-head > .cell:nth-child(3) { flex:1.25; }
 .outgoing-record-table .table-action-head,.outgoing-record-table .row-actions { flex:none; width:70rpx; padding:0 3rpx; justify-content:space-around; gap:0; }
-.outgoing-import-action { margin:-12rpx 0 20rpx; padding:12rpx 0; border:1rpx solid #d7e5e2; border-radius:14rpx; text-align:center; background:#f7fbfa; }
+.outgoing-import-actions { display:flex; gap:14rpx; margin:-12rpx 0 20rpx; }
+.outgoing-import-action { display:flex; flex:1; align-items:center; justify-content:center; min-width:0; min-height:70rpx; margin:0; padding:12rpx 8rpx; border:1rpx solid #d7e5e2; border-radius:14rpx; text-align:center; background:#f7fbfa; }
+.outgoing-excel-import-hint { margin-top:-14rpx; }
 .batch-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12rpx; margin:10rpx 0 12rpx; padding:12rpx 14rpx; border:1rpx solid #eadfd3; border-radius:12rpx; background:#fffdf9; }
 .batch-mode-toggle { flex:none; color:#a82922; font-size:21rpx; font-weight:600; }
 .batch-toolbar-actions { display:flex; flex:1; justify-content:flex-end; align-items:center; gap:14rpx; color:#6d6056; font-size:20rpx; white-space:nowrap; }

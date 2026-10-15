@@ -2,7 +2,11 @@
   <view class="detail-head"><view class="detail-name">{{name}}</view><view class="detail-meta">▦　{{date}}　⌖　{{location}}</view><view class="row-actions" style="margin-top:16rpx"><text bindtap="editBanquet">编辑宴席信息</text></view></view>
   <view class="total-banner"><view><view class="subtle">收到礼金合计</view><view class="detail-meta">{{count}} 位来宾</view></view><text class="total-number">¥{{total}}</text></view>
   <view class="inline-help">直接在表格中填写；录入一行后会自动出现下一行，填完整并离开单元格即保存。</view>
-  <view class="primary-button import-guests-button" bindtap="importGuests">批量导入</view>
+  <view class="import-actions">
+    <view class="primary-button import-guests-button import-action-button" bindtap="importGuests">批量导入</view>
+    <view class="excel-import-action import-action-button" bindtap="importGuestsFromExcel">Excel 导入</view>
+  </view>
+  <text class="excel-import-hint">支持 .xlsx；表头需包含姓名和金额，备注或地址可选</text>
   <view class="toolbar"><view class="search-box">⌕　<input placeholder="搜索来宾姓名" value="{{keyword}}" bindinput="search" /></view></view>
   <view class="batch-toolbar">
     <text class="batch-mode-toggle" bindtap="toggleBatchMode">{{batchMode ? '完成' : '批量操作'}}</text>
