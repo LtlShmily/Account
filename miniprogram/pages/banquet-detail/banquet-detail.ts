@@ -1,6 +1,7 @@
 import { banquetTotal, formatDate, getLedger, GuestGift, makeId, money, parseAmount, saveLedger } from '../../services/ledger'
 import { formatBatchImportText } from '../../services/batch-export'
 import { chooseExcelImport } from '../../services/excel-import'
+import { getListDisplayMode, ListDisplayMode } from '../../services/list-display-mode'
 
 const PAGE_SIZE = 50
 const pointerInteractions = new WeakSet<object>()
@@ -44,6 +45,7 @@ Page({
     pageEnd: 0,
     focusTargetId: '',
     focusTargetField: '',
+    listDisplayMode: 'paged' as ListDisplayMode,
   },
 
   onLoad(query: Record<string, string | undefined>) {
@@ -65,8 +67,9 @@ Page({
       ? filteredGuests.findIndex((guest) => guest.id === this.data.sourceGuestId)
       : -1
     const visibleRowCount = filteredGuests.length + (keyword ? 0 : draftRows.length)
-    const totalPages = Math.max(1, Math.ceil(visibleRowCount / PAGE_SIZE))
-    const requestedPage = sourceIndex >= 0 ? Math.floor(sourceIndex / PAGE_SIZE) + 1 : (resetToFirst ? 1 : this.data.currentPage)
+    const listDisplayMode = getListDisplayMode()
+    const totalPages = listDisplayMode === 'all' ? 1 : Math.max(1, Math.ceil(visibleRowCount / PAGE_SIZE))
+    const requestedPage = listDisplayMode === 'all' ? 1 : sourceIndex >= 0 ? Math.floor(sourceIndex / PAGE_SIZE) + 1 : (resetToFirst ? 1 : this.data.currentPage)
     const currentPage = Math.max(1, Math.min(requestedPage, totalPages))
     const start = (currentPage - 1) * PAGE_SIZE
     const savedRows: GuestRow[] = filteredGuests.map((guest, index) => ({
@@ -82,9 +85,9 @@ Page({
     }))
     const positionedDrafts = draftRows.map((row, index) => ({ ...row, globalIndex: banquet.guests.length + index }))
     const allRows = keyword ? savedRows : [...savedRows, ...positionedDrafts]
-    const guests = allRows.slice(start, start + PAGE_SIZE)
+    const guests = listDisplayMode === 'all' ? allRows : allRows.slice(start, start + PAGE_SIZE)
     const pageStart = filteredGuests.length ? Math.min(start + 1, filteredGuests.length) : 0
-    const pageEnd = Math.min(start + PAGE_SIZE, filteredGuests.length)
+    const pageEnd = listDisplayMode === 'all' ? filteredGuests.length : Math.min(start + PAGE_SIZE, filteredGuests.length)
 
     this.setData({
       name: banquet.name,
@@ -99,6 +102,7 @@ Page({
       pageInput: String(currentPage),
       pageStart,
       pageEnd,
+      listDisplayMode,
       sourceJumpDone: this.data.sourceJumpDone || sourceIndex >= 0 || Boolean(this.data.sourceGuestId),
     }, () => {
       if (sourceIndex >= 0) wx.pageScrollTo({ selector: `#guest-${this.data.sourceGuestId}`, duration: 300 })
@@ -209,7 +213,7 @@ Page({
       const target = this.data.guests.find((row) => row.globalIndex === globalIndex)
       if (target) this.setData({ focusTargetId: target.id, focusTargetField: field })
     }
-    if (targetPage === this.data.currentPage) {
+    if (this.data.listDisplayMode === 'all' || targetPage === this.data.currentPage) {
       applyFocus()
       return
     }
@@ -232,12 +236,12 @@ Page({
       const hasTrailingBlank = draftRows.some((draft) => !draft.name.trim() && !draft.amount.trim() && !draft.address.trim())
       if ((row.name.trim() || row.amount.trim() || row.address.trim()) && !hasTrailingBlank) draftRows.push(emptyGuestRow(this.data.count + draftRows.length))
       const nextDraft = draftRows[draftRows.length - 1]
-      if (nextDraft && nextDraft.globalIndex < this.data.currentPage * PAGE_SIZE) {
+      if (nextDraft && (this.data.listDisplayMode === 'all' || nextDraft.globalIndex < this.data.currentPage * PAGE_SIZE)) {
         if (!rows.some((item) => item.id === nextDraft.id)) rows.push(nextDraft)
       }
     }
     const visibleCount = this.data.count + draftRows.length
-    const totalPages = Math.max(1, Math.ceil(visibleCount / PAGE_SIZE))
+    const totalPages = this.data.listDisplayMode === 'all' ? 1 : Math.max(1, Math.ceil(visibleCount / PAGE_SIZE))
     this.setData({ guests: rows, draftRows, totalPages })
   },
   onCellBlur(e: WechatMiniprogram.Input) {
@@ -276,7 +280,7 @@ Page({
       if (!draftRows.length || draftRows.every((draft) => draft.name.trim() || draft.amount.trim() || draft.address.trim())) draftRows.push(emptyGuestRow(banquet.guests.length))
       const savedRow: GuestRow = { ...row, recordId: guest.id, name: guest.name, amount: (guest.amount / 100).toFixed(2), address: guest.address, date: guest.date, isDraft: false }
       const guests = this.data.guests.map((item) => item.id === row.id ? savedRow : item)
-      const totalPages = Math.max(1, Math.ceil((banquet.guests.length + draftRows.length) / PAGE_SIZE))
+      const totalPages = this.data.listDisplayMode === 'all' ? 1 : Math.max(1, Math.ceil((banquet.guests.length + draftRows.length) / PAGE_SIZE))
       saveLedger(ledger)
       this.setData({ draftRows, guests, totalPages, total: money(banquetTotal(banquet)), count: banquet.guests.length }, () => {
         if (shouldAdvancePage) this.focusGuestInput(row.globalIndex + 1, 'name')

@@ -17,6 +17,7 @@
     <view class="home-quick-action share-action">分享</view>
     <view class="home-quick-action export-action" bindtap="exportData">导出</view>
   </view>
+  <view class="list-mode-switch {{listDisplayMode === 'all' ? 'list-mode-switch-all' : ''}}" bindtap="toggleListDisplayMode"><text class="list-mode-switch-label">明细展示模式</text><text class="list-mode-switch-value">{{listDisplayModeLabel}}　切换 ›</text></view>
   <view class="section-title recent-heading"><text>近期记录</text><text class="section-note">最近 6 笔</text></view>
   <view wx:if="{{recent.length}}" class="recent-card">
     <view wx:for="{{recent}}" wx:key="id" class="recent-row"><view class="record-badge {{item.typeClass}}">{{item.type}}</view><view class="recent-main"><text class="recent-name">{{item.name}}</text><text class="recent-detail">{{item.detail}} · {{item.date}}</text></view><text class="recent-amount {{item.typeClass}}">{{item.amount}}</text></view>

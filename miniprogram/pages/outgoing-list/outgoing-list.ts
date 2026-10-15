@@ -1,6 +1,7 @@
 import { currentMonth, formatDate, getLedger, makeId, money, saveLedger, today } from '../../services/ledger'
 import { formatBatchImportText } from '../../services/batch-export'
 import { chooseExcelImport } from '../../services/excel-import'
+import { getListDisplayMode, ListDisplayMode } from '../../services/list-display-mode'
 
 const PAGE_SIZE = 50
 
@@ -21,6 +22,7 @@ Page({
     pageInput: '1',
     pageStart: 0,
     pageEnd: 0,
+    listDisplayMode: 'paged' as ListDisplayMode,
   },
 
   onShow() { this.refresh() },
@@ -35,10 +37,12 @@ Page({
     const matched = ledger.outgoing
       .filter((gift) => (!selected || gift.date.startsWith(selected)) && (!keyword || gift.name.toLocaleLowerCase().includes(keyword) || (gift.note || '').toLocaleLowerCase().includes(keyword)))
       .sort((a, b) => b.date.localeCompare(a.date))
-    const totalPages = Math.max(1, Math.ceil(matched.length / PAGE_SIZE))
-    const currentPage = resetToFirst ? 1 : Math.min(this.data.currentPage, totalPages)
+    const listDisplayMode = getListDisplayMode()
+    const totalPages = listDisplayMode === 'all' ? 1 : Math.max(1, Math.ceil(matched.length / PAGE_SIZE))
+    const currentPage = listDisplayMode === 'all' || resetToFirst ? 1 : Math.min(this.data.currentPage, totalPages)
     const start = (currentPage - 1) * PAGE_SIZE
-    const pageItems = matched.slice(start, start + PAGE_SIZE).map((gift) => ({
+    const visibleItems = listDisplayMode === 'all' ? matched : matched.slice(start, start + PAGE_SIZE)
+    const pageItems = visibleItems.map((gift) => ({
       id: gift.id,
       name: gift.name,
       amount: money(gift.amount),
@@ -57,7 +61,8 @@ Page({
       totalPages,
       pageInput: String(currentPage),
       pageStart: matched.length ? start + 1 : 0,
-      pageEnd: Math.min(start + PAGE_SIZE, matched.length),
+      pageEnd: listDisplayMode === 'all' ? matched.length : Math.min(start + PAGE_SIZE, matched.length),
+      listDisplayMode,
     })
   },
 
