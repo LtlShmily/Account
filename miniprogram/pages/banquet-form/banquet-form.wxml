@@ -1,9 +1,9 @@
 <view class="page">
   <view class="screen-title">{{title}}</view>
   <view class="form-card">
-    <view class="field"><text class="field-label">宴席名称 <text class="required">*</text></text><input class="field-input" value="{{name}}" data-field="name" bindinput="onTextInput" placeholder="例如：周子其婚宴" maxlength="40" /></view>
+    <view class="field"><text class="field-label">宴席名称 <text class="required">*</text></text><input class="field-input" value="{{name}}" data-field="name" bindinput="onTextInput" placeholder="例如：张三婚宴" maxlength="40" /></view>
     <view class="field"><text class="field-label">日期 <text class="required">*</text></text><picker mode="date" value="{{date}}" bindchange="onDateChange"><view class="date-picker">▦　{{date}}　⌄</view></picker></view>
-    <view class="field"><text class="field-label">宴席地址 <text class="required">*</text></text><input class="field-input" value="{{location}}" data-field="location" bindinput="onTextInput" placeholder="例如：雷打坡酒楼" maxlength="80" /></view>
+    <view class="field"><text class="field-label">宴席地址 <text class="required">*</text></text><input class="field-input" value="{{location}}" data-field="location" bindinput="onTextInput" placeholder="例如：礼簿酒楼" maxlength="80" /></view>
     <view class="field"><text class="field-label">备注（可选）</text><textarea class="field-textarea" value="{{note}}" data-field="note" bindinput="onTextInput" placeholder="补充说明" maxlength="200" /></view>
   </view>
   <view class="primary-button" bindtap="save">保存</view>
