@@ -13,6 +13,7 @@
     <view wx:if="{{batchMode}}" class="batch-toolbar-actions"><text bindtap="selectAllVisible">全选本页</text><text>已选 {{selectedIds.length}} 条</text><text bindtap="exportSelected">复制导出</text><text class="batch-delete-action" bindtap="deleteSelected">删除</text></view>
   </view>
   <view wx:if="{{totalPages > 1}}" class="list-pagination">
+    <view class="pagination-action {{currentPage <= 1 ? 'pagination-disabled' : ''}}" bindtap="firstPage">首页</view>
     <view class="pagination-action {{currentPage <= 1 ? 'pagination-disabled' : ''}}" bindtap="previousPage">上一页</view>
     <text class="pagination-count">共 {{count}} 笔　{{currentPage}}/{{totalPages}} 页</text>
     <view class="pagination-jump"><input type="number" value="{{pageInput}}" bindinput="onPageInput" confirm-type="done" /><text bindtap="goToPage">跳页</text></view>
@@ -30,6 +31,7 @@
   </view>
   <view wx:if="{{!guests.length && keyword}}" class="empty-card"><text>没有符合条件的来宾</text></view>
   <view wx:if="{{totalPages > 1}}" class="list-pagination list-pagination-bottom">
+    <view class="pagination-action {{currentPage <= 1 ? 'pagination-disabled' : ''}}" bindtap="firstPage">首页</view>
     <view class="pagination-action {{currentPage <= 1 ? 'pagination-disabled' : ''}}" bindtap="previousPage">上一页</view>
     <text class="pagination-count">{{currentPage}} / {{totalPages}} 页</text>
     <view class="pagination-action" bindtap="lastPage">尾页</view>

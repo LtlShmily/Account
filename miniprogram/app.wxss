@@ -145,7 +145,7 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .alphabet-index-active { color:#286a6e; }
 .alphabet-index-inactive { color:#cfc6bd; }
 .list-pagination { display:flex; align-items:center; justify-content:space-between; gap:8rpx; margin:14rpx 0; padding:12rpx 10rpx; border:1rpx solid #eadfd2; border-radius:12rpx; background:#fffdf9; color:#66584f; font-size:21rpx; }
-.pagination-action { flex:none; padding:10rpx 12rpx; color:#286a6e; }
+.pagination-action { flex:none; padding:10rpx 7rpx; color:#286a6e; }
 .pagination-disabled { opacity:.35; }
 .pagination-count { flex:1; min-width:0; text-align:center; color:#8e8176; white-space:nowrap; }
 .pagination-jump { display:flex; align-items:center; gap:6rpx; flex:none; }

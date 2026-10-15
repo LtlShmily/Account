@@ -77,6 +77,7 @@ Page({
     }
     this.setData({ currentPage: Math.min(requested, this.data.totalPages) }, () => this.refresh())
   },
+  firstPage() { if (this.data.currentPage > 1) this.setData({ currentPage: 1 }, () => this.refresh()) },
   previousPage() { if (this.data.currentPage > 1) this.setData({ currentPage: this.data.currentPage - 1 }, () => this.refresh()) },
   nextPage() { if (this.data.currentPage < this.data.totalPages) this.setData({ currentPage: this.data.currentPage + 1 }, () => this.refresh()) },
   lastPage() { this.setData({ currentPage: this.data.totalPages }, () => this.refresh()) },

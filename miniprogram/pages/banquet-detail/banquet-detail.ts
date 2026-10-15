@@ -119,6 +119,7 @@ Page({
     }
     this.setData({ currentPage: Math.min(requested, this.data.totalPages), focusTargetId: '', focusTargetField: '' }, () => this.refresh())
   },
+  firstPage() { if (this.data.currentPage > 1) this.setData({ currentPage: 1, focusTargetId: '', focusTargetField: '' }, () => this.refresh()) },
   previousPage() {
     if (this.data.currentPage > 1) this.setData({ currentPage: this.data.currentPage - 1, focusTargetId: '', focusTargetField: '' }, () => this.refresh())
   },
