@@ -462,10 +462,15 @@ const DISTANCE_BASE = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193
 const DISTANCE_EXTRA = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13]
 
 class BitReader {
-  private offset = 0
-  private bitOffset = 0
+  private offset: number
+  private bitOffset: number
+  private readonly bytes: Uint8Array
 
-  constructor(private readonly bytes: Uint8Array) {}
+  constructor(bytes: Uint8Array) {
+    this.bytes = bytes
+    this.offset = 0
+    this.bitOffset = 0
+  }
 
   readBits(count: number): number {
     let value = 0
