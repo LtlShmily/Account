@@ -14,7 +14,6 @@
     <view class="summary-item"><text class="summary-label">往来净额</text><text class="summary-value dark">¥{{balance}}</text></view>
   </view>
   <view class="home-quick-actions">
-    <view class="home-quick-action share-action">分享</view>
     <view class="home-quick-action export-action" bindtap="exportData">导出</view>
   </view>
   <view class="list-mode-switch {{listDisplayMode === 'all' ? 'list-mode-switch-all' : ''}}" bindtap="toggleListDisplayMode"><text class="list-mode-switch-label">明细展示模式</text><text class="list-mode-switch-value">{{listDisplayModeLabel}}　切换 ›</text></view>

@@ -1,7 +1,6 @@
 <view class="page" bindtouchstart="markTouch">
   <view class="detail-head"><view class="detail-name">{{name}}</view><view class="detail-meta">▦　{{date}}　⌖　{{location}}</view><view class="row-actions" style="margin-top:16rpx"><text bindtap="editBanquet">编辑宴席信息</text></view></view>
   <view class="total-banner"><view><view class="subtle">收到礼金合计</view><view class="detail-meta">{{count}} 位来宾</view></view><text class="total-number">¥{{total}}</text></view>
-  <view class="inline-help">每页显示 50 条。直接填写表格；输入有效姓名和金额后自动补空行，填完整并离开单元格即保存。按 Tab 或键盘“下一项”到页尾时，会跳到下一页的空行。</view>
   <view class="import-actions">
     <view class="primary-button import-guests-button import-action-button" bindtap="importGuests">批量导入</view>
     <view class="excel-import-action import-action-button" bindtap="importGuestsFromExcel">Excel 导入</view>

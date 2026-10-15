@@ -23,7 +23,6 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .list-mode-switch-value { color:#ad2a25; font-weight:600; white-space:nowrap; }
 .list-mode-switch-all { background:#f3f8f6; border-color:#d3e3dd; }
 .list-mode-switch-all .list-mode-switch-value { color:#286a6e; }
-.share-action { color:#856f5d; background:#fffdf9; }
 .export-action { border-color:#b5221e; color:#fff8ed; background:linear-gradient(100deg,#c92822,#a91619); box-shadow:0 5rpx 12rpx rgba(172,31,25,.14); }
 .recent-heading { margin-top:34rpx; }.recent-card { padding:0 20rpx; }.recent-row { display:flex; align-items:center; min-height:105rpx; border-bottom:1rpx solid #f2eae1; }.recent-row:last-child { border-bottom:0; }.record-badge { display:flex; align-items:center; justify-content:center; width:46rpx; height:46rpx; margin-right:18rpx; border-radius:13rpx; color:white; font-size:22rpx; }.record-badge.receive { background:#bd2722; }.record-badge.send { background:#2d7373; }.recent-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:8rpx; }.recent-name { color:#382e28; font-size:25rpx; }.recent-detail { overflow:hidden; color:#a29488; font-size:20rpx; white-space:nowrap; text-overflow:ellipsis; }.recent-amount { font-size:25rpx; font-weight:600; }.empty-card { display:flex; flex-direction:column; align-items:center; padding:45rpx 20rpx; color:#86796e; font-size:25rpx; }.empty-mark { margin-bottom:12rpx; color:#c8a77b; font-size:44rpx; }.empty-hint { margin-top:12rpx; color:#b1a59b; font-size:21rpx; }.footer-note { margin-top:34rpx; text-align:center; color:#c0b1a1; font-size:20rpx; letter-spacing:2rpx; }
 .toolbar { display:flex; align-items:center; gap:14rpx; margin:20rpx 0; }.search-box,.month-box { height:72rpx; display:flex; align-items:center; padding:0 20rpx; border:1rpx solid #eadfd2; border-radius:40rpx; background:#fffdf9; color:#796d63; font-size:23rpx; }.search-box { flex:1; }.search-box input { width:100%; font-size:23rpx; }.month-box { min-width:190rpx; justify-content:center; }.month-box picker { width:100%; text-align:center; }
@@ -40,7 +39,6 @@ view, text, input, textarea, button { box-sizing: border-box; }
 .draft-row .cell { border-bottom:1rpx dashed #e8d5bd; }
 .delete-cell { color:#aa5148; font-size:19rpx; }
 .draft-mark { color:#bf9d72; font-size:26rpx; }
-.inline-help { padding:16rpx 18rpx 0; color:#9a8877; font-size:21rpx; line-height:1.6; }
 .summary-page { padding-bottom:50rpx; }
 .summary-overview { margin-bottom:18rpx; }
 .summary-explain { margin:8rpx 2rpx 12rpx; color:#95877b; font-size:21rpx; line-height:1.6; }
